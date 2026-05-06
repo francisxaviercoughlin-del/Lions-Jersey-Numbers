@@ -7,9 +7,9 @@ import requests
 import streamlit as st
 
 
-TEAM = "det"
-PFR_URL = "https://www.pro-football-reference.com/players/uniform.cgi?number={number}&team={team}"
+TEAM = "DET"
 LOGO_PATH = Path("lions_logo.png")
+ROSTER_URL = "https://github.com/nflverse/nflverse-data/releases/download/rosters/roster_{season}.csv"
 
 
 st.set_page_config(
@@ -92,7 +92,7 @@ CUSTOM_CSS = """
     .lions-hero p {
         margin: 14px 0 0 0;
         font-size: 1.08rem;
-        max-width: 720px;
+        max-width: 760px;
         opacity: .94;
     }
 
@@ -138,7 +138,8 @@ CUSTOM_CSS = """
         color: var(--lions-dark-blue);
     }
 
-    div.stButton > button {
+    div.stButton > button,
+    div.stDownloadButton > button {
         background: linear-gradient(135deg, var(--lions-blue), var(--lions-dark-blue)) !important;
         color: white !important;
         border: 1px solid rgba(255,255,255,.18) !important;
@@ -148,7 +149,8 @@ CUSTOM_CSS = """
         box-shadow: 0 8px 18px rgba(0,51,141,.22);
     }
 
-    div.stButton > button:hover {
+    div.stButton > button:hover,
+    div.stDownloadButton > button:hover {
         background: linear-gradient(135deg, #008bd7, #002b78) !important;
         color: white !important;
         transform: translateY(-1px);
@@ -192,58 +194,118 @@ CUSTOM_CSS = """
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 
+def _first_existing_column(df: pd.DataFrame, options: list[str]) -> str | None:
+    for col in options:
+        if col in df.columns:
+            return col
+    return None
+
+
 @st.cache_data(ttl=60 * 60 * 24, show_spinner=False)
-def fetch_uniform_number(number: int) -> pd.DataFrame:
-    url = PFR_URL.format(number=number, team=TEAM)
-    headers = {"User-Agent": "Mozilla/5.0 jersey-number-research-app/1.0"}
-    response = requests.get(url, headers=headers, timeout=20)
+def fetch_roster_for_season(season: int) -> pd.DataFrame:
+    """
+    Fetch one season of nflverse roster data from GitHub releases.
+    This avoids Pro Football Reference 403 blocks on Streamlit Cloud.
+    """
+    url = ROSTER_URL.format(season=season)
+    response = requests.get(url, timeout=30)
     response.raise_for_status()
-
-    tables = pd.read_html(StringIO(response.text))
-    if not tables:
-        return pd.DataFrame(columns=["Player", "From", "To", "AV", "Source"])
-
-    df = tables[0].copy()
-    keep = [c for c in ["Player", "From", "To", "AV"] if c in df.columns]
-    df = df[keep]
-
-    if "From" in df.columns:
-        df["From"] = pd.to_numeric(df["From"], errors="coerce").astype("Int64")
-    if "To" in df.columns:
-        df["To"] = pd.to_numeric(df["To"], errors="coerce").astype("Int64")
-    if "AV" in df.columns:
-        df["AV"] = pd.to_numeric(df["AV"], errors="coerce")
-
-    df["Jersey #"] = number
-    df["Source"] = url
+    df = pd.read_csv(StringIO(response.text), low_memory=False)
+    df["season"] = season
     return df
 
 
-def overlap_filter(df: pd.DataFrame, start_year: int, end_year: int) -> pd.DataFrame:
-    if df.empty:
-        return df
+@st.cache_data(ttl=60 * 60 * 24, show_spinner=False)
+def fetch_lions_rosters(start_year: int, end_year: int) -> pd.DataFrame:
+    frames = []
+    failed = []
 
-    mask = (df["From"] <= end_year) & (df["To"] >= start_year)
-    result = df.loc[mask].copy()
+    for season in range(start_year, end_year + 1):
+        try:
+            df = fetch_roster_for_season(season)
+            frames.append(df)
+        except Exception:
+            failed.append(season)
 
-    if result.empty:
-        return result
+    if not frames:
+        raise RuntimeError(
+            "No roster seasons could be downloaded. Check your internet connection or try a smaller range."
+        )
 
-    result["Overlap Years"] = result.apply(
-        lambda r: f"{max(int(r['From']), start_year)}–{min(int(r['To']), end_year)}",
-        axis=1,
+    data = pd.concat(frames, ignore_index=True)
+
+    team_col = _first_existing_column(data, ["team", "recent_team", "club_code"])
+    if team_col is None:
+        raise RuntimeError("Could not find a team column in the roster data.")
+
+    data = data[data[team_col].astype(str).str.upper() == TEAM].copy()
+
+    name_col = _first_existing_column(data, ["player_name", "full_name", "football_name", "display_name"])
+    jersey_col = _first_existing_column(data, ["jersey_number", "jersey", "uniform_number", "number"])
+    pos_col = _first_existing_column(data, ["position", "position_group"])
+
+    if name_col is None or jersey_col is None:
+        raise RuntimeError("Could not find player name or jersey number columns in the roster data.")
+
+    keep_cols = ["season", name_col, jersey_col]
+    if pos_col is not None:
+        keep_cols.append(pos_col)
+
+    out = data[keep_cols].copy()
+    out = out.rename(
+        columns={
+            name_col: "Player",
+            jersey_col: "Jersey #",
+            pos_col if pos_col is not None else "position": "Position",
+        }
     )
-    result["Full Lions Number Span"] = result.apply(
-        lambda r: f"{int(r['From'])}–{int(r['To'])}",
-        axis=1,
-    )
 
-    cols = ["Jersey #", "Player", "Overlap Years", "Full Lions Number Span"]
-    if "AV" in result.columns:
-        cols.append("AV")
-    cols.append("Source")
+    out["Jersey #"] = pd.to_numeric(out["Jersey #"], errors="coerce")
+    out = out.dropna(subset=["Jersey #", "Player"])
+    out["Jersey #"] = out["Jersey #"].astype(int)
 
-    return result[cols].sort_values(["Full Lions Number Span", "Player"], ascending=[False, True])
+    if "Position" not in out.columns:
+        out["Position"] = ""
+
+    out["Source"] = "nflverse roster CSVs on GitHub releases"
+    out["Download Issues"] = ", ".join(map(str, failed)) if failed else ""
+    return out
+
+
+def compress_player_spans(df: pd.DataFrame, number: int) -> pd.DataFrame:
+    matches = df[df["Jersey #"] == int(number)].copy()
+    if matches.empty:
+        return matches
+
+    grouped_rows = []
+    for (player, jersey), group in matches.groupby(["Player", "Jersey #"], dropna=False):
+        seasons = sorted(group["season"].dropna().astype(int).unique().tolist())
+        positions = sorted({str(x) for x in group.get("Position", pd.Series(dtype=str)).dropna().unique() if str(x) != "nan"})
+        spans = []
+        if seasons:
+            start = prev = seasons[0]
+            for yr in seasons[1:]:
+                if yr == prev + 1:
+                    prev = yr
+                else:
+                    spans.append((start, prev))
+                    start = prev = yr
+            spans.append((start, prev))
+
+        grouped_rows.append(
+            {
+                "Jersey #": jersey,
+                "Player": player,
+                "Position": ", ".join(positions),
+                "Matching Seasons": ", ".join(str(y) for y in seasons),
+                "Season Span": ", ".join(f"{a}" if a == b else f"{a}–{b}" for a, b in spans),
+                "First Season": min(seasons) if seasons else None,
+                "Last Season": max(seasons) if seasons else None,
+            }
+        )
+
+    result = pd.DataFrame(grouped_rows)
+    return result.sort_values(["First Season", "Player"], ascending=[False, True])
 
 
 hero_left, hero_right = st.columns([4, 1])
@@ -254,7 +316,7 @@ with hero_left:
         <div class="lions-hero">
             <div class="eyebrow">🦁 Detroit Lions Uniform History</div>
             <h1>Jersey Number Finder</h1>
-            <p>Search any Lions jersey number and season range to see every player who wore it during that timeframe.</p>
+            <p>Search any Lions jersey number and season range to see every player listed with that number during those seasons.</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -284,9 +346,9 @@ with st.sidebar:
     if date_mode == "Years":
         start_year, end_year = st.slider(
             "Season range",
-            min_value=1930,
-            max_value=max(current_year + 1, 2026),
-            value=(1990, current_year),
+            min_value=1920,
+            max_value=max(current_year, 2026),
+            value=(1990, min(current_year, 2026)),
         )
     else:
         col_a, col_b = st.columns(2)
@@ -299,7 +361,7 @@ with st.sidebar:
 
     search = st.button("Find Lions", use_container_width=True)
 
-    st.caption("Exact dates are converted to NFL seasons by year because source data is season-level.")
+    st.caption("Exact dates are converted to NFL seasons by year because roster data is season-level.")
 
 
 if not search:
@@ -319,18 +381,18 @@ if start_year > end_year:
     st.error("Start year must be before or equal to end year.")
     st.stop()
 
-with st.spinner("Checking the Lions uniform history..."):
+with st.spinner("Checking nflverse roster files..."):
     try:
-        raw = fetch_uniform_number(int(number))
-        results = overlap_filter(raw, int(start_year), int(end_year))
+        raw = fetch_lions_rosters(int(start_year), int(end_year))
+        results = compress_player_spans(raw, int(number))
     except Exception as e:
-        st.error("I could not fetch the data source right now.")
+        st.error("I could not download or process the roster data.")
         st.exception(e)
         st.stop()
 
 left, mid, right = st.columns(3)
 left.metric("Jersey Number", f"#{int(number)}")
-mid.metric("Selected Range", f"{int(start_year)}–{int(end_year)}")
+mid.metric("Selected Seasons", f"{int(start_year)}–{int(end_year)}")
 right.metric("Matching Players", len(results))
 
 st.divider()
@@ -342,19 +404,20 @@ else:
     st.markdown(
         f"""
         <div class="result-card">
-            <h3 style="margin-top:0;color:#00338D;">Lions who wore #{int(number)} during {int(start_year)}–{int(end_year)}</h3>
+            <h3 style="margin-top:0;color:#00338D;">Lions listed with #{int(number)} during {int(start_year)}–{int(end_year)}</h3>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
+    display_cols = ["Jersey #", "Player", "Position", "Season Span", "Matching Seasons"]
     st.dataframe(
-        results.drop(columns=["Source"]),
+        results[display_cols],
         use_container_width=True,
         hide_index=True,
     )
 
-    csv = results.drop(columns=["Source"]).to_csv(index=False).encode("utf-8")
+    csv = results[display_cols].to_csv(index=False).encode("utf-8")
     st.download_button(
         "Download results as CSV",
         data=csv,
@@ -362,10 +425,15 @@ else:
         mime="text/csv",
     )
 
-    with st.expander("Source link"):
-        st.write(results["Source"].iloc[0])
+    issues = raw["Download Issues"].iloc[0] if "Download Issues" in raw.columns and len(raw) else ""
+    if issues:
+        st.info(f"Some seasons could not be downloaded and were skipped: {issues}")
+
+with st.expander("Data source"):
+    st.write("This version uses nflverse roster CSV files from GitHub releases instead of Pro Football Reference scraping.")
+    st.code(ROSTER_URL, language="text")
 
 st.markdown(
-    '<div class="footer-note">Data source: Pro Football Reference uniform-number pages. Results reflect season spans, not exact transaction dates.</div>',
+    '<div class="footer-note">Data source: nflverse roster CSVs. Results reflect season roster listings, not exact transaction dates or game-by-game uniform usage.</div>',
     unsafe_allow_html=True,
 )

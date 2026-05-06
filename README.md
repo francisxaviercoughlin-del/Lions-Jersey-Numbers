@@ -1,11 +1,15 @@
 # Detroit Lions Jersey Number Finder
 
-A Detroit Lions-branded Streamlit app that lets you enter:
+This version fixes the Pro Football Reference `403 Forbidden` issue by using **nflverse roster CSV files from GitHub releases** instead of scraping Pro Football Reference.
 
-- Jersey number
+## What it does
+
+Enter:
+
+- Detroit Lions jersey number
 - Start/end season range, or exact dates
 
-It returns all Detroit Lions players who wore that number during any overlapping part of the selected timeframe.
+It returns Lions players listed with that jersey number during the selected seasons.
 
 ## Run locally
 
@@ -14,9 +18,15 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
+## Deploy on Streamlit Community Cloud
+
+1. Upload `app.py` and `requirements.txt` to your GitHub repo.
+2. In Streamlit Community Cloud, set the main file path to `app.py`.
+3. Deploy.
+
 ## Optional logo
 
-To show a logo in the app, add a file named:
+Add a file named:
 
 ```text
 lions_logo.png
@@ -24,16 +34,8 @@ lions_logo.png
 
 in the same folder as `app.py`.
 
-The app will automatically display it. If no logo file is present, it shows a Lions-style emoji badge.
-
-## Deploy on Streamlit Community Cloud
-
-1. Create or open your GitHub repo.
-2. Upload `app.py`, `requirements.txt`, and optionally `lions_logo.png`.
-3. In Streamlit Community Cloud, select the repo.
-4. Set the main file path to `app.py`.
-5. Deploy.
-
 ## Notes
 
-Pro Football Reference uniform data is season-level. If you enter exact dates, the app converts those dates to years and searches season overlap.
+- Source: nflverse roster CSV files on GitHub releases.
+- Data is season-level, not exact transaction-date-level.
+- Exact date searches are converted to season years.
