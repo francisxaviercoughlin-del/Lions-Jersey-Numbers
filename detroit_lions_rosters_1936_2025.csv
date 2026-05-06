@@ -1,0 +1,510 @@
+Season,Player,Number,Position,College
+1936,Ernie Caddel,1.0,WB,Stanford
+1936,Frank Christensen,2.0,BB,Utah
+1936,Glenn Presnell,3.0,TB,Nebraska
+1936,Buddy Parker,4.0,BB,"North Texas,Centenary"
+1936,Ace Gutowsky,5.0,FB,Oklahoma City
+1936,Dutch Clark,7.0,TB,Colorado Col.
+1936,Bill McKalip,8.0,E-WB,Oregon St.
+1936,Bill Shepherd,9.0,FB,Western Maryland
+1936,Ed Klewicki,10.0,LE,Michigan St.
+1936,Harry Ebding,11.0,E,St. Mary's (CA)
+1936,John Schneller,12.0,RE,Wisconsin
+1936,Del Ritchhart,13.0,C,Colorado
+1936,George Christensen,14.0,RT,Oregon
+1936,Sid Wagner,15.0,G,Michigan St.
+1936,Jack Johnson,16.0,LT,Utah
+1936,Clare Randolph,17.0,C-G-LB-E,Indiana
+1936,Joe Kopcha,18.0,RG,Chattanooga
+1936,Regis Monahan,19.0,G-T,Ohio St.
+1936,Ox Emerson,20.0,G-C,Texas
+1936,Sam Knox,21.0,LG,"New Hampshire,Illinois"
+1936,Tom Hupke,22.0,G-T,Alabama
+1936,Jim Steen,23.0,T,Syracuse
+1936,Red Stacy,25.0,RT,Oklahoma
+1936,Butch Morse,27.0,E,Oregon
+1936,Wilbur White,30.0,B,Colorado St.
+1936,Ike Petersen,40.0,B,Gonzaga
+1936,Team Total,,,
+1937,Ernie Caddel,1.0,WB,Stanford
+1937,Frank Christensen,2.0,RT,Utah
+1937,Lloyd Cardwell,3.0,WB-DB-FB,Nebraska
+1937,Ray Reckmack,4.0,E-HB,Syracuse
+1937,Ace Gutowsky,5.0,FB,Oklahoma City
+1937,Vern Huffman,6.0,BB,Indiana
+1937,Dutch Clark,7.0,TB,Colorado Col.
+1937,Bill Shepherd,9.0,B,Western Maryland
+1937,Ed Klewicki,10.0,LE,Michigan St.
+1937,Harry Ebding,11.0,RE,St. Mary's (CA)
+1937,Chuck Hanneman,12.0,E,Eastern Michigan
+1937,Del Ritchhart,13.0,C,Colorado
+1937,Bill Feldhaus,14.0,RG,Cincinnati
+1937,Ralph Isselhardt,15.0,G,Franklin (IN)
+1937,Sid Wagner,15.0,RG,Michigan St.
+1937,Jack Johnson,16.0,LT,Utah
+1937,Dixie Stokes,17.0,C,Centenary
+1937,Hal Cooper,18.0,G,Detroit Mercy
+1937,Regis Monahan,19.0,G-T,Ohio St.
+1937,Ox Emerson,20.0,LG,Texas
+1937,Tom Fena,21.0,G,Denver
+1937,Tom Hupke,22.0,G-T,Alabama
+1937,Lee Kizzire,23.0,FB,Wyoming
+1937,Bob Reynolds,24.0,RT,Stanford
+1937,Red Stacy,25.0,T-G,Oklahoma
+1937,George Christensen,26.0,T-G,Oregon
+1937,Butch Morse,27.0,RE,Oregon
+1937,Charlie Payne,,WB,Detroit Mercy
+1937,Team Total,,,
+1938,Ernie Caddel,1.0,WB,Stanford
+1938,Kent Ryan,2.0,HB,Utah St.
+1938,Lloyd Cardwell,3.0,WB,Nebraska
+1938,Dick Nardi,4.0,B,Ohio St.
+1938,Ace Gutowsky,5.0,FB,Oklahoma City
+1938,Vern Huffman,6.0,TB,Indiana
+1938,Dutch Clark,7.0,TB-DB,Colorado Col.
+1938,Paul Szakash,8.0,E-BB-FB,Montana
+1938,Bill Shepherd,9.0,FB,Western Maryland
+1938,Ed Klewicki,10.0,LE,Michigan St.
+1938,Monk Moscrip,11.0,RE,Stanford
+1938,Chuck Hanneman,12.0,E,Eastern Michigan
+1938,Butch Morse,13.0,E,Oregon
+1938,George Christensen,14.0,T-G,Oregon
+1938,Sid Wagner,15.0,LG,Michigan St.
+1938,Jack Johnson,16.0,LT,Utah
+1938,Dixie Stokes,17.0,C,Centenary
+1938,Bill Rogers,18.0,T,Villanova
+1938,Regis Monahan,19.0,G-T,Ohio St.
+1938,Jim McDonald,20.0,B,Ohio St.
+1938,Maury Patt,21.0,E,Carnegie Mellon
+1938,Fred Vanzo,22.0,BB,Northwestern
+1938,Les Graham,23.0,G,Tulsa
+1938,Bob Reynolds,24.0,RT,Stanford
+1938,Lou Barle,25.0,HB-QB,Minnesota-Duluth
+1938,Bill Feldhaus,26.0,RG,Cincinnati
+1938,Tony Matisi,27.0,T,Pittsburgh
+1938,Bill Radovich,28.0,G,USC
+1938,Jack Mackenroth,29.0,C,North Dakota
+1938,Alex Wojciechowicz,30.0,C,Fordham
+1938,Team Total,,,
+1939,Hal Brill,2.0,TB,Wichita St.
+1939,Lloyd Cardwell,3.0,WB,Nebraska
+1939,Darrell Tully,4.0,TB-DB,Texas A&M-Commerce
+1939,Howie Weiss,5.0,FB,Wisconsin
+1939,Kent Ryan,6.0,HB,Utah St.
+1939,Paul Szakash,8.0,E-BB-FB,Montana
+1939,Bill Shepherd,9.0,FB,Western Maryland
+1939,Gordon Gore,10.0,HB,SW Oklahoma St.
+1939,Monk Moscrip,11.0,LE,Stanford
+1939,Chuck Hanneman,12.0,RE,Eastern Michigan
+1939,John Wiatrak,13.0,C,Washington
+1939,Ray George,14.0,RT,USC
+1939,Tony Tonelli,15.0,C-G,USC
+1939,Jack Johnson,16.0,LT,Utah
+1939,Dixie Stokes,17.0,C,Centenary
+1939,Bill Rogers,18.0,T,Villanova
+1939,Jim McDonald,20.0,B,Ohio St.
+1939,Elvin Hutchison,21.0,HB,Whittier
+1939,Fred Vanzo,22.0,BB,Northwestern
+1939,Bill Feldhaus,26.0,RG,Cincinnati
+1939,Bill Radovich,28.0,G,USC
+1939,Jim Austin,29.0,E,St. Mary's (CA)
+1939,Alex Wojciechowicz,30.0,C,Fordham
+1939,Dave Diehl,32.0,E,Michigan St.
+1939,Phil Martinovich,34.0,FB-G,Pacific
+1939,Bill Moore,35.0,E-DE,North Carolina
+1939,Dwight Sloan,36.0,TB,Arkansas
+1939,Johnny Pingel,37.0,TB,Michigan St.
+1939,Ray Hamilton,42.0,E,Arkansas
+1939,Ray Clemons,55.0,G,Central Oklahoma
+1939,Steve Maronic,64.0,T,North Carolina
+1939,Tony Calvelli,66.0,C-G,Stanford
+1939,Cal Thomas,75.0,G,Tulsa
+1939,Socko Wiethe,78.0,LG,Xavier (OH)
+1939,Connie Mack Berry,83.0,E,North Carolina St.
+1939,Team Total,,,
+1940,Lloyd Cardwell,3.0,WB,Nebraska
+1940,Howie Weiss,5.0,FB,Wisconsin
+1940,Kent Ryan,6.0,HB,Utah St.
+1940,Sam Tsoutsouvas,8.0,C-LB,Oregon St.
+1940,Bill Shepherd,9.0,B,Western Maryland
+1940,Bill Fisk,10.0,E-DE,USC
+1940,Chuck Hanneman,12.0,RE,Eastern Michigan
+1940,Clem Crabtree,13.0,T-G,Wake Forest
+1940,Cal Thomas,15.0,G,Tulsa
+1940,Jack Johnson,16.0,LT,Utah
+1940,Bill Rogers,18.0,T,Villanova
+1940,Jack Morlock,21.0,WB,Marshall
+1940,Fred Vanzo,22.0,BB,Northwestern
+1940,Paul Moore,23.0,BB-LB,Presbyterian
+1940,Whizzer White,24.0,TB,Colorado
+1940,Johnny Hackenbruck,25.0,T,Oregon St.
+1940,Bill Radovich,26.0,G,USC
+1940,Butch Morse,27.0,E,Oregon
+1940,Bill Feldhaus,28.0,RG,Cincinnati
+1940,Alex Wojciechowicz,30.0,C,Fordham
+1940,Dave Diehl,32.0,E,Michigan St.
+1940,Harry Smith,33.0,RT,USC
+1940,Bill Callihan,34.0,B-T,Nebraska
+1940,Stillman Rouse,35.0,LE,Missouri
+1940,Dwight Sloan,36.0,TB,Arkansas
+1940,Cotton Price,37.0,TB-DB-QB,Texas A&M
+1940,Tony Furst,38.0,T,Dayton
+1940,Bob Winslow,40.0,DE,USC
+1940,Tony Calvelli,42.0,C,Stanford
+1940,Harry Speelman,43.0,G,Michigan St.
+1940,Steve Maronic,44.0,T,North Carolina
+1940,Socko Wiethe,48.0,LG,Xavier (OH)
+1940,Glenn Morris,57.0,E,Colorado St.
+1940,Les McDonald,,E,Nebraska
+1940,Team Total,,,
+1941,Lloyd Cardwell,10.0,WB-DB-FB,Nebraska
+1941,Dick Booth,11.0,WB,Case Western Reserve
+1941,Ned Mathews,12.0,WB-HB,UCLA
+1941,John Noppenberg,14.0,B,Miami (FL)
+1941,Lou Tomasetti,15.0,FB-HB,Bucknell
+1941,Fred Vanzo,22.0,BB,Northwestern
+1941,Paul Moore,23.0,BB-LB,Presbyterian
+1941,Bill Callihan,25.0,BB,Nebraska
+1941,Steve Belichick,30.0,FB,Case Western Reserve
+1941,Harry Hopp,31.0,FB,Nebraska
+1941,Lloyd Parsons,32.0,B,"Minnesota,Gustavus Adolphus"
+1941,Milt Piepul,33.0,FB,Notre Dame
+1941,Cotton Price,42.0,TB-DB-QB,Texas A&M
+1941,Whizzer White,44.0,TB,Colorado
+1941,Billy Jefferson,46.0,HB,Mississippi St.
+1941,Alex Wojciechowicz,50.0,C,Fordham
+1941,Robert Nelson,51.0,C-T-DT-LB,Baylor
+1941,Dunc Obee,52.0,C,Dayton
+1941,Augie Lio,61.0,LG,Georgetown (DC)
+1941,Jack Mattiford,62.0,G,Marshall
+1941,Stan Batinski,65.0,G-T,Temple
+1941,Bill Radovich,66.0,G,USC
+1941,Chuck Hanneman,68.0,E,Eastern Michigan
+1941,Socko Wiethe,68.0,RG,Xavier (OH)
+1941,John Tripson,70.0,LT,Mississippi St.
+1941,Ted Pavelec,71.0,G-T,Detroit Mercy
+1941,Clem Crabtree,72.0,T-G,Wake Forest
+1941,Tony Furst,73.0,RT,Dayton
+1941,Emil Uremovich,75.0,T-DE-E,Indiana
+1941,Andy Logan,76.0,T-C,Case Western Reserve
+1941,Alex Schibanoff,79.0,T,Franklin & Marshall
+1941,Bill Fisk,80.0,LE,USC
+1941,Maurice Britt,81.0,E,Arkansas
+1941,John Jett,82.0,E,Wake Forest
+1941,Stan Andersen,82.0,T-E,Stanford
+1941,Paul Szakash,84.0,RE,Montana
+1941,Owen Thuerk,86.0,E,
+1941,Team Total,,,
+1942,Lloyd Cardwell,10.0,WB-DB-FB,Nebraska
+1942,Emil Banjavic,11.0,WB-DB,Arizona
+1942,Ned Mathews,12.0,WB,UCLA
+1942,Johnny Hall,14.0,WB-HB,TCU
+1942,Paul Szakash,22.0,E-BB-FB,Montana
+1942,Murray Evans,23.0,BB-QB,Hardin-Simmons
+1942,Bill Callihan,25.0,BB,Nebraska
+1942,Frank Grigonis,31.0,FB,Chattanooga
+1942,John Polanski,32.0,FB,Wake Forest
+1942,Harry Seltzer,33.0,FB,Charleston (WV)
+1942,Elmer Hackney,34.0,FB,Kansas St.
+1942,Chet Wetterlund,40.0,TB-DB,Illinois Wesleyan
+1942,Mickey Sanzotta,42.0,FB,Case Western Reserve
+1942,Harry Hopp,44.0,TB,Nebraska
+1942,Tom Colella,46.0,HB-TB,Canisius
+1942,Alex Wojciechowicz,50.0,RE,Fordham
+1942,Sloko Gill,51.0,C-LB-G,Youngstown St.
+1942,John Schiechl,52.0,C,Santa Clara
+1942,Tony Arena,52.0,C-LB,Michigan St.
+1942,Larry Sartori,60.0,G,Fordham
+1942,Augie Lio,61.0,RG,Georgetown (DC)
+1942,Tony Zuzzio,65.0,G,Muhlenberg
+1942,Bill Kennedy,66.0,G,Michigan St.
+1942,Socko Wiethe,68.0,G-LB,Xavier (OH)
+1942,Ted Pavelec,71.0,LG,Detroit Mercy
+1942,Hank Goodman,72.0,T,"St. Bonaventure,George Washington,West Virginia"
+1942,George Speth,73.0,LT,Murray St.
+1942,Emil Uremovich,75.0,RT,Indiana
+1942,Tom Chantiles,76.0,T,USC
+1942,Alex Schibanoff,78.0,LT,Franklin & Marshall
+1942,Bill Fisk,80.0,LE,USC
+1942,Joe Stringfellow,81.0,TB,Southern Miss
+1942,Perry Scott,82.0,E,Muhlenberg
+1942,Keith Ranspot,84.0,E,SMU
+1942,Charlie Behan,85.0,E,Northern Illinois
+1942,Gran Harrison,86.0,E,Mississippi St.
+1942,Larry Knorr,88.0,E,"Alabama,Dayton"
+1942,Team Total,,,
+1943,Lloyd Cardwell,10.0,WB-DB-FB,Nebraska
+1943,Art Van Tone,11.0,WB-DB,Southern Miss
+1943,Mike Corgan,17.0,FB,Notre Dame
+1943,Bert Kuczynski,20.0,E,Pennsylvania
+1943,Frankie Sinkwich,21.0,TB,Georgia
+1943,Murray Evans,23.0,BB,Hardin-Simmons
+1943,Bill Callihan,25.0,BB,Nebraska
+1943,Elmer Hackney,34.0,FB,Kansas St.
+1943,Roy Stuart,40.0,G-LB,Tulsa
+1943,Ned Mathews,42.0,WB,UCLA
+1943,Harry Hopp,44.0,FB,Nebraska
+1943,Bob Keene,45.0,B,Detroit Mercy
+1943,Tom Colella,46.0,HB-TB,Canisius
+1943,Chuck Fenenbock,48.0,TB,UCLA
+1943,Alex Wojciechowicz,50.0,C,Fordham
+1943,Sam Busich,51.0,E,Ohio St.
+1943,Gerry Conlee,52.0,C,St. Mary's (CA)
+1943,Sonny Liles,62.0,G-LB,Oklahoma St.
+1943,Alex Ketzko,64.0,T,Michigan St.
+1943,Stan Batinski,65.0,G-T,Temple
+1943,Anthony Rubino,66.0,RG,Wake Forest
+1943,Lyle Rockenbach,68.0,G,Michigan St.
+1943,Ed Opalewski,71.0,T,Eastern Michigan
+1943,Ted Pavelec,71.0,G-T,Detroit Mercy
+1943,Augie Lio,73.0,LT,Georgetown (DC)
+1943,Al Kaporch,76.0,RT,St. Bonaventure
+1943,Ernie Rosteck,78.0,C,
+1943,Bill Fisk,80.0,LE,USC
+1943,Bob Layden,81.0,E-T,Southwestern (KS)
+1943,Lloyd Wickett,81.0,T,Oregon St.
+1943,Jack Matheson,82.0,LG,Western Michigan
+1943,Riley Matheson,83.0,G,"Cameron,Texas-El Paso"
+1943,Ben Hightower,86.0,RE,Sam Houston St.
+1943,Team Total,,,
+1944,John Greene,10.0,LG,Michigan
+1944,Art Van Tone,11.0,WB,Southern Miss
+1944,Tony Aiello,17.0,/,Youngstown St.
+1944,Sonny Liles,20.0,G-LB,Oklahoma St.
+1944,Frankie Sinkwich,21.0,TB,Georgia
+1944,Fred Dawley,23.0,FB,Michigan
+1944,Bill Callihan,25.0,BB,Nebraska
+1944,Elmer Hackney,34.0,FB,Kansas St.
+1944,Jackie Lowther,42.0,B,Detroit Mercy
+1944,Bob Keene,45.0,B,Detroit Mercy
+1944,Harry Bolton,46.0,T,Oklahoma St.
+1944,Alex Wojciechowicz,50.0,C,Fordham
+1944,George Sirochman,52.0,G,Duquesne
+1944,Joe D'Orazio,60.0,T,Ithaca
+1944,Wayne Clark,61.0,E,Utah
+1944,Bill Rogers,62.0,T,Villanova
+1944,Ed Eiden,62.0,C,Scranton
+1944,Buzz Trebotich,64.0,B,St. Mary's (CA)
+1944,Stan Batinski,65.0,LT,Temple
+1944,Freeman Rexer,66.0,E,Tulane
+1944,Tom Kennedy,68.0,T,Wayne State (MI)
+1944,Ed Opalewski,71.0,LT,Eastern Michigan
+1944,Tony Furst,73.0,T,Dayton
+1944,Al Kaporch,75.0,RG,St. Bonaventure
+1944,Luke Lindon,77.0,RT,Kentucky
+1944,Ernie Rosteck,78.0,C,
+1944,Dale Hansen,81.0,T,Michigan St.
+1944,Jack Matheson,82.0,RE,Western Michigan
+1944,Paul Blessing,83.0,E,Nebraska-Kearney
+1944,Dave Diehl,84.0,LE,Michigan St.
+1944,Bob Westfall,86.0,FB,Michigan
+1944,Team Total,,,
+1945,Damon Tassos,6.0,G,Texas A&M
+1945,John Greene,10.0,LE,Michigan
+1945,Art Van Tone,11.0,WB-DB,Southern Miss
+1945,Ed Frutig,11.0,E,Michigan
+1945,Dick Mesak,12.0,T,St. Mary's (CA)
+1945,Chuck DeShane,17.0,WB,Alabama
+1945,Bob Sneddon,20.0,DB-HB-WB,"Weber St.,St. Mary's (CA)"
+1945,Dick Weber,20.0,TB,St. Louis
+1945,Sonny Liles,20.0,G-LB,Oklahoma St.
+1945,Robert Nelson,22.0,C,Baylor
+1945,Bill Callihan,25.0,LT,Nebraska
+1945,Elmer Madarik,29.0,HB-WB,Detroit Mercy
+1945,Rex Williams,30.0,C,Texas Tech
+1945,Bob Brumley,32.0,WB,Rice
+1945,Jim Thomason,33.0,WB,Texas A&M
+1945,Elmer Hackney,34.0,FB,Kansas St.
+1945,Vince Mazza,40.0,E,
+1945,Andy Farkas,42.0,WB,Detroit Mercy
+1945,Dave Ryan,44.0,TB,Hardin-Simmons
+1945,Bob Keene,45.0,B,Detroit Mercy
+1945,Larry Sartori,45.0,G,Fordham
+1945,Ted Grefe,45.0,E,Northwestern
+1945,Joseph Manzo,46.0,T,Boston Col.
+1945,Chuck Fenenbock,48.0,TB,UCLA
+1945,Alex Wojciechowicz,50.0,C-LB-E,Fordham
+1945,Archie Milano,51.0,E,St. Francis (PA)
+1945,Dom Sigillo,52.0,T-G,Xavier (OH)
+1945,Cotton Price,62.0,TB-DB-QB,Texas A&M
+1945,Buzz Trebotich,64.0,BB,St. Mary's (CA)
+1945,Dick Booth,64.0,B,Case Western Reserve
+1945,Stan Batinski,65.0,LG,Temple
+1945,Lake Roberson,66.0,DE,Mississippi
+1945,Larry Knorr,68.0,E,"Alabama,Dayton"
+1945,Michael Kostiuk,71.0,T,Detroit Tech
+1945,Bill Radovich,73.0,RG,USC
+1945,Al Kaporch,75.0,T-G,St. Bonaventure
+1945,Garvin Mugg,77.0,T,North Texas
+1945,Luke Lindon,77.0,T,Kentucky
+1945,Frank Kring,78.0,LB,TCU
+1945,Emil Uremovich,81.0,RT,Indiana
+1945,Joe Krol,81.0,HB,Western Ontario
+1945,Jack Matheson,82.0,RE,Western Michigan
+1945,Frank Szymanski,83.0,C,Notre Dame
+1945,Dave Diehl,84.0,E,Michigan St.
+1945,Bob Westfall,86.0,FB,Michigan
+1945,Team Total,,,
+1946,Damon Tassos,6.0,RG,Texas A&M
+1946,John Greene,10.0,E-G-B,Michigan
+1946,Ed Frutig,11.0,E,Michigan
+1946,Chuck DeShane,17.0,BB,Alabama
+1946,Mickey Sanzotta,18.0,B,Case Western Reserve
+1946,Lloyd Wickett,20.0,T,Oregon St.
+1946,Ted Cremer,21.0,LE,Auburn
+1946,Aldo Forte,25.0,G-T,Montana
+1946,Vince Mazza,29.0,E,
+1946,Gene Spangler,30.0,WB-DB,Tulsa
+1946,Ralph Jones,31.0,E-DE,"Union (TN),Alabama"
+1946,Walt Vezmar,33.0,G,Michigan St.
+1946,Elmer Hackney,34.0,FB,Kansas St.
+1946,Elmer Madarik,40.0,WB,Detroit Mercy
+1946,Jim Jones,42.0,T-DB,Union (TN)
+1946,Dave Ryan,44.0,TB,Hardin-Simmons
+1946,Leon Fichman,46.0,RT,Alabama
+1946,Alex Wojciechowicz,50.0,C-LB-E,Fordham
+1946,Jack Helms,52.0,DE,Georgia Tech
+1946,Ivan Schottel,55.0,B-E,NW Missouri St.
+1946,Stan Batinski,65.0,LG,Temple
+1946,Camp Wilson,66.0,FB,"Tarleton St.,Hardin-Simmons,Tulsa"
+1946,Anthony Rubino,68.0,G,Wake Forest
+1946,Russ Thomas,71.0,LT,Ohio St.
+1946,Jim Montgomery,73.0,T,Texas A&M
+1946,Billy deCorrevont,76.0,WB,Northwestern
+1946,Walt Jurkiewicz,80.0,C,Indiana
+1946,Emil Uremovich,81.0,RT,Indiana
+1946,Jack Matheson,82.0,RE,Western Michigan
+1946,Frank Szymanski,83.0,C,Notre Dame
+1946,Bob Cifers,84.0,HB,Tennessee
+1946,Joel McCoy,85.0,TB,Alabama
+1946,Bob Westfall,86.0,FB-LB-TB,Michigan
+1946,Jim Callahan,88.0,TB,"Texas Tech,Texas"
+1946,Team Total,,,
+1947,Roy Zimmerman,6.0,QB,San Jose St.
+1947,John Greene,10.0,LE,Michigan
+1947,Clyde LeForce,11.0,QB,Tulsa
+1947,Dick Stovall,12.0,LB-G-C,Abilene Christian
+1947,Joe Watt,15.0,HB-DB,Syracuse
+1947,Chuck DeShane,17.0,RG,Alabama
+1947,Ted Cook,20.0,LE,Alabama
+1947,Ted Cremer,21.0,RE,Auburn
+1947,Tommy James,22.0,DB-HB,Ohio St.
+1947,Ralph Heywood,31.0,E-DE,USC
+1947,Steve Sucic,33.0,HB-FB,Illinois
+1947,Walt Vezmar,33.0,G,Michigan St.
+1947,Floyd Rhea,34.0,G,Oregon
+1947,George Hekkers,34.0,T,Wisconsin
+1947,Bill Dudley,35.0,LH,Virginia
+1947,Bob DeFruiter,39.0,HB,Nebraska
+1947,Elmer Madarik,40.0,RH,Detroit Mercy
+1947,Bill Ward,42.0,G,"Washington St.,Washington"
+1947,Bob Ivory,42.0,G,Detroit Mercy
+1947,Ben Chase,44.0,G,Navy
+1947,Dave Ryan,44.0,TB-HB,Hardin-Simmons
+1947,Pete Kmetovic,45.0,HB,Stanford
+1947,Leon Fichman,46.0,T,Alabama
+1947,Reed Nilsen,46.0,C,BYU
+1947,Bill Hillman,48.0,B,Tennessee
+1947,Ken Reese,48.0,HB-QB,Alabama
+1947,Jack Dugger,50.0,T-DE,Ohio St.
+1947,Les Lear,51.0,T,Manitoba
+1947,Ed Stacco,52.0,T,Colgate
+1947,Cecil Souders,55.0,E-T,Ohio St.
+1947,Bill O'Brien,62.0,HB,
+1947,Stan Batinski,65.0,LG,Temple
+1947,Camp Wilson,66.0,FB,"Tarleton St.,Hardin-Simmons,Tulsa"
+1947,Merv Pregulman,67.0,C,Michigan
+1947,Russ Thomas,71.0,LT,Ohio St.
+1947,Elmer Jones,73.0,G-LB,"Franklin & Marshall,Wake Forest"
+1947,Robert Derleth,73.0,T,Michigan
+1947,Bob Wiese,75.0,B,Michigan
+1947,John Sanchez,77.0,T,"Redlands,San Francisco"
+1947,Kelley Mote,78.0,E-DE-DB,"South Carolina,Duke"
+1947,Joe Margucci,81.0,HB-QB,USC
+1947,Mitch Olenski,82.0,RT,Alabama
+1947,Frank Szymanski,83.0,C,Notre Dame
+1947,Bob Westfall,85.0,FB-LB-TB,Michigan
+1947,Team Total,,,
+1948,Jim Gillette,11.0,HB,Virginia
+1948,Joe Billy Baumgardner,11.0,HB,Texas
+1948,Earl Maves,12.0,WB,"Michigan,Wisconsin"
+1948,Joe Watt,14.0,RH,Syracuse
+1948,Joe Margucci,15.0,RH,USC
+1948,Camp Wilson,16.0,FB,"Tarleton St.,Hardin-Simmons,Tulsa"
+1948,Jim Hunnicutt,16.0,G,South Carolina
+1948,Mel Groomes,17.0,HB,Indiana
+1948,Andy Dudish,18.0,HB,Georgia
+1948,Paul Sarringhaus,18.0,HB,Ohio St.
+1948,Clyde LeForce,22.0,QB,Tulsa
+1948,Fred Enke,24.0,QB,Arizona
+1948,Larry Ellis,28.0,LB,Syracuse
+1948,Elmer Madarik,30.0,HB-WB,Detroit Mercy
+1948,Ken Roskie,30.0,FB,South Carolina
+1948,Steve Sucic,33.0,HB-FB,Illinois
+1948,Bill Dudley,35.0,LH,Virginia
+1948,Max Bumgardner,36.0,DE,Texas
+1948,Bob Wiese,38.0,B,Michigan
+1948,Charley Sarratt,40.0,QB,"Clemson,Oklahoma"
+1948,George Grimes,42.0,DB-WB,"North Carolina,Virginia"
+1948,Bap Manzini,53.0,C,St. Vincent
+1948,Howard Duncan,53.0,C,Ohio St.
+1948,Roger Harding,55.0,C-LB,California
+1948,Merv Pregulman,57.0,C,Michigan
+1948,Chuck DeShane,60.0,B-G,Alabama
+1948,Elmer Jones,62.0,G-LB,"Franklin & Marshall,Wake Forest"
+1948,Bill Miklich,63.0,LB-BB-C,Idaho
+1948,Howie Brown,64.0,LG,Indiana
+1948,Les Bingaman,65.0,DG-G,Illinois
+1948,Dick Stovall,66.0,LB-G-C,Abilene Christian
+1948,Bill Ward,67.0,RG,"Washington St.,Washington"
+1948,George Hekkers,70.0,T,Wisconsin
+1948,Russ Thomas,71.0,LT,Ohio St.
+1948,Jack Dugger,74.0,RT,Ohio St.
+1948,Paul Briggs,76.0,T,Colorado
+1948,Dale Hansen,77.0,T,Michigan St.
+1948,Ralph Heywood,80.0,E-DE,USC
+1948,John Greene,81.0,RE,Michigan
+1948,Cecil Souders,82.0,RE,Ohio St.
+1948,Kelley Mote,83.0,LE,"South Carolina,Duke"
+1948,Ted Cremer,85.0,E-DE,Auburn
+1948,Bob Mann,87.0,LE,Michigan
+1948,Ivan Schottel,88.0,B-E,NW Missouri St.
+1948,Team Total,,,
+1949,Cloyce Box,11.0,RH,"Louisiana Tech,West Texas A&M"
+1949,Camp Wilson,16.0,FB,"Tarleton St.,Hardin-Simmons,Tulsa"
+1949,Mel Groomes,17.0,HB,Indiana
+1949,Wally Triplett,18.0,RH,Penn St.
+1949,Chick Maggioli,19.0,DB-HB,"Indiana,Notre Dame,Illinois"
+1949,Clyde LeForce,22.0,QB,Tulsa
+1949,Fred Enke,24.0,QB,Arizona
+1949,Frank Tripucka,28.0,QB,Notre Dame
+1949,John Panelli,33.0,LB-FB,Notre Dame
+1949,Bill Dudley,35.0,LH,Virginia
+1949,John Hollar,36.0,FB,Appalachian St.
+1949,Jim Mello,38.0,DB-FB-LB,Notre Dame
+1949,Bob Smith,40.0,DB-HB-WB,"Tulsa,Iowa"
+1949,Don Doll,44.0,DB,USC
+1949,Bob Pifferini,53.0,C,San Jose St.
+1949,George Karstens,55.0,C,Indiana
+1949,Chuck DeShane,60.0,B-G,Alabama
+1949,Mario DeMarco,63.0,LG,Miami (FL)
+1949,Howie Brown,64.0,RT,Indiana
+1949,Les Bingaman,65.0,DG-G,Illinois
+1949,Bill Ward,67.0,RG,"Washington St.,Washington"
+1949,George Hekkers,70.0,LT,Wisconsin
+1949,Russ Thomas,71.0,T,Ohio St.
+1949,Jack Simmons,73.0,C,"Maryland,Detroit Mercy"
+1949,John Prchlik,75.0,DT-T,Yale
+1949,John Treadaway,76.0,T,Hardin-Simmons
+1949,Mike Roussos,76.0,T,Pittsburgh
+1949,John Greene,81.0,RE,Michigan
+1949,Cecil Souders,82.0,LT,Ohio St.
+1949,Kelley Mote,83.0,E-DE-DB,"South Carolina,Duke"
+1949,Barney Hafen,84.0,DE-E,Utah
+1949,Abe Addams,85.0,/,Indiana
+1949,Sam Goldman,85.0,E,"Ohio St.,Samford"
+1949,Al Russas,86.0,T-DE,Tennessee
+1949,Bob Mann,87.0,LE,Michigan
+1949,Ollie Poole,88.0,DE-E,"North Carolina,Mississippi"
+1949,Hal Prescott,,E,Hardin-Simmons
+1949,Team Total,,,
