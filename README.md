@@ -1,15 +1,20 @@
-# Detroit Lions Jersey Number Finder
+# Detroit Lions Jersey Number Finder — Historical Version
 
-This version fixes the Pro Football Reference `403 Forbidden` issue by using **nflverse roster CSV files from GitHub releases** instead of scraping Pro Football Reference.
+This version fixes the problem where nflverse jersey-number data only goes back to recent seasons.
 
-## What it does
+## Source order
 
-Enter:
+The app now uses:
 
-- Detroit Lions jersey number
-- Start/end season range, or exact dates
+1. `lions_uniform_numbers.csv` if you add it locally
+2. PFR's historical uniform-number table through the `aws.pro-football-reference.com` host
+3. nflverse roster data only as a recent fallback
 
-It returns Lions players listed with that jersey number during the selected seasons.
+## Files
+
+- `app.py`
+- `requirements.txt`
+- `lions_uniform_numbers.csv` sample file
 
 ## Run locally
 
@@ -18,24 +23,18 @@ pip install -r requirements.txt
 streamlit run app.py
 ```
 
-## Deploy on Streamlit Community Cloud
+## Best production setup
 
-1. Upload `app.py` and `requirements.txt` to your GitHub repo.
-2. In Streamlit Community Cloud, set the main file path to `app.py`.
-3. Deploy.
-
-## Optional logo
-
-Add a file named:
+For the most reliable Streamlit Cloud deployment, build out `lions_uniform_numbers.csv` with:
 
 ```text
-lions_logo.png
+Jersey #,Player,From,To,AV
 ```
 
-in the same folder as `app.py`.
+The app will use that local CSV first and will not depend on a website request.
 
 ## Notes
 
-- Source: nflverse roster CSV files on GitHub releases.
-- Data is season-level, not exact transaction-date-level.
-- Exact date searches are converted to season years.
+- Data is season-level, not game-by-game.
+- Exact dates are converted to season years.
+- nflverse is only used as a fallback because jersey number coverage may not go all the way back historically.

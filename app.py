@@ -7,9 +7,17 @@ import requests
 import streamlit as st
 
 
-TEAM = "DET"
+TEAM = "det"
+TEAM_CODE = "DET"
 LOGO_PATH = Path("lions_logo.png")
-ROSTER_URL = "https://github.com/nflverse/nflverse-data/releases/download/rosters/roster_{season}.csv"
+LOCAL_DATA_PATH = Path("lions_uniform_numbers.csv")
+
+# Primary historical source. This is the same PFR uniform-number table, but the aws host is often friendlier
+# to cloud-hosted apps than www.pro-football-reference.com.
+PFR_AWS_URL = "https://aws.pro-football-reference.com/players/uniform.cgi?number={number}&team={team}"
+
+# Recent fallback only. nflverse roster jersey coverage is not complete historically.
+NFLVERSE_ROSTER_URL = "https://github.com/nflverse/nflverse-data/releases/download/rosters/roster_{season}.csv"
 
 
 st.set_page_config(
@@ -25,7 +33,6 @@ CUSTOM_CSS = """
         --lions-blue: #0076B6;
         --lions-dark-blue: #00338D;
         --lions-silver: #B0B7BC;
-        --lions-gray: #f2f5f8;
         --lions-white: #ffffff;
     }
 
@@ -132,12 +139,6 @@ CUSTOM_CSS = """
         border-right: 1px solid #d7e2ee;
     }
 
-    [data-testid="stSidebar"] h1,
-    [data-testid="stSidebar"] h2,
-    [data-testid="stSidebar"] h3 {
-        color: var(--lions-dark-blue);
-    }
-
     div.stButton > button,
     div.stDownloadButton > button {
         background: linear-gradient(135deg, var(--lions-blue), var(--lions-dark-blue)) !important;
@@ -153,7 +154,6 @@ CUSTOM_CSS = """
     div.stDownloadButton > button:hover {
         background: linear-gradient(135deg, #008bd7, #002b78) !important;
         color: white !important;
-        transform: translateY(-1px);
     }
 
     div[data-testid="stMetric"] {
@@ -170,18 +170,6 @@ CUSTOM_CSS = """
         font-weight: 900;
     }
 
-    .stDataFrame {
-        border-radius: 18px;
-        overflow: hidden;
-        border: 1px solid #dae4ef;
-    }
-
-    .footer-note {
-        color: #64748b;
-        font-size: .86rem;
-        margin-top: 16px;
-    }
-
     .blue-line {
         height: 6px;
         width: 100%;
@@ -189,12 +177,86 @@ CUSTOM_CSS = """
         border-radius: 999px;
         margin: 10px 0 22px 0;
     }
+
+    .footer-note {
+        color: #64748b;
+        font-size: .86rem;
+        margin-top: 16px;
+    }
 </style>
 """
 st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 
 
-def _first_existing_column(df: pd.DataFrame, options: list[str]) -> str | None:
+def normalize_uniform_df(df: pd.DataFrame, number: int, source: str) -> pd.DataFrame:
+    """Normalize uniform history columns to Jersey #, Player, From, To, AV, Source."""
+    if df.empty:
+        return pd.DataFrame(columns=["Jersey #", "Player", "From", "To", "AV", "Source"])
+
+    rename_map = {}
+    for col in df.columns:
+        low = str(col).strip().lower()
+        if low in ["player", "name"]:
+            rename_map[col] = "Player"
+        elif low in ["from", "first", "start", "start_year"]:
+            rename_map[col] = "From"
+        elif low in ["to", "last", "end", "end_year"]:
+            rename_map[col] = "To"
+        elif low in ["av"]:
+            rename_map[col] = "AV"
+        elif low in ["jersey #", "jersey", "number", "uniform_number"]:
+            rename_map[col] = "Jersey #"
+
+    df = df.rename(columns=rename_map).copy()
+
+    if "Jersey #" not in df.columns:
+        df["Jersey #"] = number
+
+    expected = ["Jersey #", "Player", "From", "To", "AV"]
+    for col in expected:
+        if col not in df.columns:
+            df[col] = None
+
+    df["Jersey #"] = pd.to_numeric(df["Jersey #"], errors="coerce").fillna(number).astype(int)
+    df["From"] = pd.to_numeric(df["From"], errors="coerce").astype("Int64")
+    df["To"] = pd.to_numeric(df["To"], errors="coerce").astype("Int64")
+    df["AV"] = pd.to_numeric(df["AV"], errors="coerce")
+    df["Player"] = df["Player"].astype(str).str.replace("*", "", regex=False).str.replace("+", "", regex=False).str.strip()
+    df["Source"] = source
+
+    return df.dropna(subset=["Player", "From", "To"])[["Jersey #", "Player", "From", "To", "AV", "Source"]]
+
+
+@st.cache_data(ttl=60 * 60 * 24, show_spinner=False)
+def load_local_historical_data(number: int) -> pd.DataFrame:
+    """Optional complete local CSV. Best long-term solution for Streamlit Cloud reliability."""
+    if not LOCAL_DATA_PATH.exists():
+        return pd.DataFrame(columns=["Jersey #", "Player", "From", "To", "AV", "Source"])
+
+    df = pd.read_csv(LOCAL_DATA_PATH)
+    df = normalize_uniform_df(df, number, "Local CSV: lions_uniform_numbers.csv")
+    return df[df["Jersey #"] == int(number)].copy()
+
+
+@st.cache_data(ttl=60 * 60 * 24, show_spinner=False)
+def fetch_pfr_aws_uniform_number(number: int) -> pd.DataFrame:
+    """Historical uniform table from the PFR aws host."""
+    url = PFR_AWS_URL.format(number=number, team=TEAM)
+    headers = {
+        "User-Agent": "Mozilla/5.0 Detroit-Lions-Jersey-App/1.0",
+        "Accept-Language": "en-US,en;q=0.9",
+    }
+    response = requests.get(url, headers=headers, timeout=20)
+    response.raise_for_status()
+
+    tables = pd.read_html(StringIO(response.text))
+    if not tables:
+        return pd.DataFrame(columns=["Jersey #", "Player", "From", "To", "AV", "Source"])
+
+    return normalize_uniform_df(tables[0], number, url)
+
+
+def first_existing_column(df: pd.DataFrame, options: list[str]) -> str | None:
     for col in options:
         if col in df.columns:
             return col
@@ -202,110 +264,106 @@ def _first_existing_column(df: pd.DataFrame, options: list[str]) -> str | None:
 
 
 @st.cache_data(ttl=60 * 60 * 24, show_spinner=False)
-def fetch_roster_for_season(season: int) -> pd.DataFrame:
-    """
-    Fetch one season of nflverse roster data from GitHub releases.
-    This avoids Pro Football Reference 403 blocks on Streamlit Cloud.
-    """
-    url = ROSTER_URL.format(season=season)
-    response = requests.get(url, timeout=30)
-    response.raise_for_status()
-    df = pd.read_csv(StringIO(response.text), low_memory=False)
-    df["season"] = season
-    return df
-
-
-@st.cache_data(ttl=60 * 60 * 24, show_spinner=False)
-def fetch_lions_rosters(start_year: int, end_year: int) -> pd.DataFrame:
+def fetch_nflverse_recent(start_year: int, end_year: int, number: int) -> pd.DataFrame:
+    """Recent fallback only. nflverse jersey coverage is not complete historically."""
     frames = []
-    failed = []
-
-    for season in range(start_year, end_year + 1):
+    for season in range(max(2009, start_year), end_year + 1):
         try:
-            df = fetch_roster_for_season(season)
+            response = requests.get(NFLVERSE_ROSTER_URL.format(season=season), timeout=30)
+            response.raise_for_status()
+            df = pd.read_csv(StringIO(response.text), low_memory=False)
+            df["season"] = season
             frames.append(df)
         except Exception:
-            failed.append(season)
+            pass
 
     if not frames:
-        raise RuntimeError(
-            "No roster seasons could be downloaded. Check your internet connection or try a smaller range."
-        )
+        return pd.DataFrame(columns=["Jersey #", "Player", "From", "To", "AV", "Source"])
 
     data = pd.concat(frames, ignore_index=True)
+    team_col = first_existing_column(data, ["team", "recent_team", "club_code"])
+    name_col = first_existing_column(data, ["player_name", "full_name", "football_name", "display_name"])
+    jersey_col = first_existing_column(data, ["jersey_number", "jersey", "uniform_number", "number"])
 
-    team_col = _first_existing_column(data, ["team", "recent_team", "club_code"])
-    if team_col is None:
-        raise RuntimeError("Could not find a team column in the roster data.")
+    if not all([team_col, name_col, jersey_col]):
+        return pd.DataFrame(columns=["Jersey #", "Player", "From", "To", "AV", "Source"])
 
-    data = data[data[team_col].astype(str).str.upper() == TEAM].copy()
+    data = data[data[team_col].astype(str).str.upper() == TEAM_CODE].copy()
+    data[jersey_col] = pd.to_numeric(data[jersey_col], errors="coerce")
+    data = data[data[jersey_col] == int(number)].copy()
 
-    name_col = _first_existing_column(data, ["player_name", "full_name", "football_name", "display_name"])
-    jersey_col = _first_existing_column(data, ["jersey_number", "jersey", "uniform_number", "number"])
-    pos_col = _first_existing_column(data, ["position", "position_group"])
+    if data.empty:
+        return pd.DataFrame(columns=["Jersey #", "Player", "From", "To", "AV", "Source"])
 
-    if name_col is None or jersey_col is None:
-        raise RuntimeError("Could not find player name or jersey number columns in the roster data.")
-
-    keep_cols = ["season", name_col, jersey_col]
-    if pos_col is not None:
-        keep_cols.append(pos_col)
-
-    out = data[keep_cols].copy()
-    out = out.rename(
-        columns={
-            name_col: "Player",
-            jersey_col: "Jersey #",
-            pos_col if pos_col is not None else "position": "Position",
-        }
-    )
-
-    out["Jersey #"] = pd.to_numeric(out["Jersey #"], errors="coerce")
-    out = out.dropna(subset=["Jersey #", "Player"])
-    out["Jersey #"] = out["Jersey #"].astype(int)
-
-    if "Position" not in out.columns:
-        out["Position"] = ""
-
-    out["Source"] = "nflverse roster CSVs on GitHub releases"
-    out["Download Issues"] = ", ".join(map(str, failed)) if failed else ""
-    return out
-
-
-def compress_player_spans(df: pd.DataFrame, number: int) -> pd.DataFrame:
-    matches = df[df["Jersey #"] == int(number)].copy()
-    if matches.empty:
-        return matches
-
-    grouped_rows = []
-    for (player, jersey), group in matches.groupby(["Player", "Jersey #"], dropna=False):
-        seasons = sorted(group["season"].dropna().astype(int).unique().tolist())
-        positions = sorted({str(x) for x in group.get("Position", pd.Series(dtype=str)).dropna().unique() if str(x) != "nan"})
-        spans = []
-        if seasons:
-            start = prev = seasons[0]
-            for yr in seasons[1:]:
-                if yr == prev + 1:
-                    prev = yr
-                else:
-                    spans.append((start, prev))
-                    start = prev = yr
-            spans.append((start, prev))
-
-        grouped_rows.append(
+    rows = []
+    for player, group in data.groupby(name_col):
+        seasons = sorted(group["season"].astype(int).unique().tolist())
+        rows.append(
             {
-                "Jersey #": jersey,
+                "Jersey #": int(number),
                 "Player": player,
-                "Position": ", ".join(positions),
-                "Matching Seasons": ", ".join(str(y) for y in seasons),
-                "Season Span": ", ".join(f"{a}" if a == b else f"{a}–{b}" for a, b in spans),
-                "First Season": min(seasons) if seasons else None,
-                "Last Season": max(seasons) if seasons else None,
+                "From": min(seasons),
+                "To": max(seasons),
+                "AV": None,
+                "Source": "nflverse recent fallback only",
             }
         )
+    return normalize_uniform_df(pd.DataFrame(rows), number, "nflverse recent fallback only")
 
-    result = pd.DataFrame(grouped_rows)
-    return result.sort_values(["First Season", "Player"], ascending=[False, True])
+
+def get_uniform_history(number: int, start_year: int, end_year: int, source_preference: str) -> tuple[pd.DataFrame, str, str]:
+    """
+    Returns df, source_used, warning.
+    """
+    warnings = []
+
+    if source_preference in ["Auto", "Local CSV only"]:
+        local = load_local_historical_data(number)
+        if not local.empty:
+            return local, "Local CSV", ""
+        if source_preference == "Local CSV only":
+            return local, "Local CSV", "No local CSV found or no matching records."
+
+    if source_preference in ["Auto", "PFR AWS historical"]:
+        try:
+            pfr = fetch_pfr_aws_uniform_number(number)
+            if not pfr.empty:
+                return pfr, "PFR AWS historical", ""
+        except Exception as e:
+            warnings.append(f"PFR AWS historical source failed: {e}")
+
+    if source_preference in ["Auto", "nflverse recent fallback"]:
+        recent = fetch_nflverse_recent(start_year, end_year, number)
+        if not recent.empty:
+            msg = "Warning: nflverse jersey-number data is a recent fallback and may not go before 2009."
+            return recent, "nflverse recent fallback", msg
+
+    return pd.DataFrame(columns=["Jersey #", "Player", "From", "To", "AV", "Source"]), "None", " | ".join(warnings) if warnings else "No records found."
+
+
+def filter_overlap(df: pd.DataFrame, start_year: int, end_year: int) -> pd.DataFrame:
+    if df.empty:
+        return df
+
+    result = df[(df["From"] <= end_year) & (df["To"] >= start_year)].copy()
+    if result.empty:
+        return result
+
+    result["Overlap Years"] = result.apply(
+        lambda r: f"{max(int(r['From']), start_year)}–{min(int(r['To']), end_year)}",
+        axis=1,
+    )
+    result["Full Number Span"] = result.apply(
+        lambda r: f"{int(r['From'])}–{int(r['To'])}",
+        axis=1,
+    )
+
+    cols = ["Jersey #", "Player", "Overlap Years", "Full Number Span"]
+    if "AV" in result.columns:
+        cols.append("AV")
+    cols.append("Source")
+
+    return result[cols].sort_values(["Full Number Span", "Player"], ascending=[False, True])
 
 
 hero_left, hero_right = st.columns([4, 1])
@@ -316,7 +374,7 @@ with hero_left:
         <div class="lions-hero">
             <div class="eyebrow">🦁 Detroit Lions Uniform History</div>
             <h1>Jersey Number Finder</h1>
-            <p>Search any Lions jersey number and season range to see every player listed with that number during those seasons.</p>
+            <p>Search any Lions jersey number and season range. Uses local historical CSV first, then PFR historical data, then recent roster fallback.</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -329,14 +387,13 @@ with hero_right:
         st.caption("Detroit Lions")
     else:
         st.markdown('<div class="logo-placeholder">🦁</div>', unsafe_allow_html=True)
-        st.caption("Add lions_logo.png to show your logo")
+        st.caption("Add lions_logo.png")
     st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown('<div class="blue-line"></div>', unsafe_allow_html=True)
 
 with st.sidebar:
     st.header("Search the Pride")
-    st.caption("Enter a number and timeframe.")
 
     number = st.number_input("Jersey number", min_value=0, max_value=99, value=20, step=1)
 
@@ -346,22 +403,28 @@ with st.sidebar:
     if date_mode == "Years":
         start_year, end_year = st.slider(
             "Season range",
-            min_value=1920,
+            min_value=1930,
             max_value=max(current_year, 2026),
-            value=(1990, min(current_year, 2026)),
+            value=(1950, min(current_year, 2026)),
         )
     else:
         col_a, col_b = st.columns(2)
         with col_a:
-            start_date = st.date_input("Start date", value=dt.date(1990, 1, 1))
+            start_date = st.date_input("Start date", value=dt.date(1950, 1, 1))
         with col_b:
             end_date = st.date_input("End date", value=dt.date.today())
         start_year = start_date.year
         end_year = end_date.year
 
+    source_preference = st.selectbox(
+        "Data source",
+        ["Auto", "Local CSV only", "PFR AWS historical", "nflverse recent fallback"],
+        help="Auto uses local CSV first, then the historical PFR AWS table, then nflverse as a recent fallback."
+    )
+
     search = st.button("Find Lions", use_container_width=True)
 
-    st.caption("Exact dates are converted to NFL seasons by year because roster data is season-level.")
+    st.caption("Exact dates are converted to season years because source data is season-level.")
 
 
 if not search:
@@ -370,7 +433,7 @@ if not search:
         <div class="result-card">
             <h3 style="margin-top:0;color:#00338D;">Ready for kickoff</h3>
             <p>Choose a jersey number and season range in the sidebar, then click <b>Find Lions</b>.</p>
-            <p style="color:#64748b;margin-bottom:0;">Example: #20 from 1989–1997.</p>
+            <p style="color:#64748b;margin-bottom:0;">For the most reliable full history on Streamlit Cloud, add a completed <code>lions_uniform_numbers.csv</code> file.</p>
         </div>
         """,
         unsafe_allow_html=True,
@@ -381,12 +444,12 @@ if start_year > end_year:
     st.error("Start year must be before or equal to end year.")
     st.stop()
 
-with st.spinner("Checking nflverse roster files..."):
+with st.spinner("Checking uniform history..."):
     try:
-        raw = fetch_lions_rosters(int(start_year), int(end_year))
-        results = compress_player_spans(raw, int(number))
+        all_rows, source_used, warning = get_uniform_history(int(number), int(start_year), int(end_year), source_preference)
+        results = filter_overlap(all_rows, int(start_year), int(end_year))
     except Exception as e:
-        st.error("I could not download or process the roster data.")
+        st.error("I could not download or process the data.")
         st.exception(e)
         st.stop()
 
@@ -395,27 +458,27 @@ left.metric("Jersey Number", f"#{int(number)}")
 mid.metric("Selected Seasons", f"{int(start_year)}–{int(end_year)}")
 right.metric("Matching Players", len(results))
 
+if warning:
+    st.warning(warning)
+
+st.info(f"Data source used: {source_used}")
+
 st.divider()
 
 if results.empty:
     st.warning(f"No Detroit Lions found wearing #{int(number)} from {int(start_year)} to {int(end_year)}.")
-    st.caption("Try widening the year range.")
 else:
     st.markdown(
         f"""
         <div class="result-card">
-            <h3 style="margin-top:0;color:#00338D;">Lions listed with #{int(number)} during {int(start_year)}–{int(end_year)}</h3>
+            <h3 style="margin-top:0;color:#00338D;">Lions who wore #{int(number)} during {int(start_year)}–{int(end_year)}</h3>
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-    display_cols = ["Jersey #", "Player", "Position", "Season Span", "Matching Seasons"]
-    st.dataframe(
-        results[display_cols],
-        use_container_width=True,
-        hide_index=True,
-    )
+    display_cols = [c for c in ["Jersey #", "Player", "Overlap Years", "Full Number Span", "AV"] if c in results.columns]
+    st.dataframe(results[display_cols], use_container_width=True, hide_index=True)
 
     csv = results[display_cols].to_csv(index=False).encode("utf-8")
     st.download_button(
@@ -425,15 +488,17 @@ else:
         mime="text/csv",
     )
 
-    issues = raw["Download Issues"].iloc[0] if "Download Issues" in raw.columns and len(raw) else ""
-    if issues:
-        st.info(f"Some seasons could not be downloaded and were skipped: {issues}")
-
-with st.expander("Data source"):
-    st.write("This version uses nflverse roster CSV files from GitHub releases instead of Pro Football Reference scraping.")
-    st.code(ROSTER_URL, language="text")
+with st.expander("Best long-term data setup"):
+    st.write(
+        "For 100% reliability on Streamlit Cloud, create a file named `lions_uniform_numbers.csv` with columns:"
+    )
+    st.code("Jersey #,Player,From,To,AV", language="text")
+    st.write(
+        "The app will use that file first. If it is missing, it tries the PFR AWS historical table. "
+        "If that fails, it falls back to nflverse recent roster data."
+    )
 
 st.markdown(
-    '<div class="footer-note">Data source: nflverse roster CSVs. Results reflect season roster listings, not exact transaction dates or game-by-game uniform usage.</div>',
+    '<div class="footer-note">Results are season-level, not exact transaction-date or game-by-game uniform usage.</div>',
     unsafe_allow_html=True,
 )
