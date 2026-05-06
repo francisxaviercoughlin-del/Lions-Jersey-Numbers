@@ -1,6 +1,4 @@
 from pathlib import Path
-import datetime as dt
-
 import pandas as pd
 import streamlit as st
 
@@ -22,7 +20,6 @@ CUSTOM_CSS = """
         --lions-blue: #0076B6;
         --lions-dark-blue: #00338D;
         --lions-silver: #B0B7BC;
-        --lions-white: #ffffff;
     }
 
     .stApp {
@@ -180,14 +177,22 @@ st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 def clean_number(value):
     if pd.isna(value):
         return None
-    text = str(value).strip()
-    text = text.replace(".0", "")
+    text = str(value).strip().replace(".0", "")
     if text == "" or text.lower() == "nan":
         return None
     try:
         return int(float(text))
     except Exception:
         return None
+
+
+def clean_text(value):
+    if pd.isna(value):
+        return ""
+    text = str(value).strip()
+    if text.lower() in ["nan", "none"]:
+        return ""
+    return text
 
 
 @st.cache_data(show_spinner=False)
@@ -207,41 +212,56 @@ def load_data() -> pd.DataFrame:
     df = df.copy()
     df["Season"] = pd.to_numeric(df["Season"], errors="coerce").astype("Int64")
     df["Number"] = df["Number"].apply(clean_number).astype("Int64")
-    df["Player"] = df["Player"].fillna("").astype(str).str.strip()
-    df["Position"] = df["Position"].fillna("").astype(str).str.strip()
-    df["College"] = df["College"].fillna("").astype(str).str.strip()
+    df["Player"] = df["Player"].apply(clean_text)
+    df["Position"] = df["Position"].apply(clean_text)
+    df["College"] = df["College"].apply(clean_text)
 
     df = df.dropna(subset=["Season", "Number"])
     df = df[df["Player"] != ""]
 
+    # Remove exact duplicate season rows from the saved CSV.
+    df = df.drop_duplicates(subset=["Season", "Player", "Number"], keep="first")
+
     return df
 
 
+def make_season_spans(seasons):
+    seasons = sorted({int(s) for s in seasons})
+    if not seasons:
+        return ""
+
+    spans = []
+    start = prev = seasons[0]
+
+    for season in seasons[1:]:
+        if season == prev + 1:
+            prev = season
+        else:
+            spans.append((start, prev))
+            start = prev = season
+
+    spans.append((start, prev))
+    return ", ".join(f"{a}" if a == b else f"{a}–{b}" for a, b in spans)
+
+
 def compress_results(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Dedupes by Player + Number only.
+    Position and college are merged so a changed/blank value does not create duplicate player rows.
+    """
     rows = []
 
-    for (player, number, position, college), group in df.groupby(
-        ["Player", "Number", "Position", "College"], dropna=False
-    ):
+    for (player, number), group in df.groupby(["Player", "Number"], dropna=False):
         seasons = sorted(group["Season"].astype(int).unique().tolist())
-
-        spans = []
-        if seasons:
-            start = prev = seasons[0]
-            for season in seasons[1:]:
-                if season == prev + 1:
-                    prev = season
-                else:
-                    spans.append((start, prev))
-                    start = prev = season
-            spans.append((start, prev))
+        positions = sorted({clean_text(x) for x in group["Position"].tolist() if clean_text(x)})
+        colleges = sorted({clean_text(x) for x in group["College"].tolist() if clean_text(x)})
 
         rows.append({
-            "Player": player,
             "Number": int(number),
-            "Position": position,
-            "College": college,
-            "Season Span": ", ".join(f"{a}" if a == b else f"{a}–{b}" for a, b in spans),
+            "Player": player,
+            "Position": ", ".join(positions),
+            "College": ", ".join(colleges),
+            "Season Span": make_season_spans(seasons),
             "Matching Seasons": ", ".join(str(s) for s in seasons),
             "First Season": min(seasons) if seasons else None,
             "Last Season": max(seasons) if seasons else None,
@@ -376,6 +396,6 @@ else:
         )
 
 st.markdown(
-    '<div class="footer-note">This app reads only detroit_lions_rosters_1936_2025.csv from the app folder.</div>',
+    '<div class="footer-note">This app reads only detroit_lions_rosters_1936_2025.csv from the app folder. Players are grouped by Player + Number to avoid duplicate rows across seasons.</div>',
     unsafe_allow_html=True,
 )
